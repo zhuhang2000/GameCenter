@@ -296,59 +296,155 @@ function drawMaze(ctx, maze, opts){
   const pad = 18;
   const cell = (size - pad*2) / maze.w;
 
+  // --- neon cyber palette (UI pass #1)
+  const C = {
+    bg0: '#070A12',
+    bg1: 'rgba(120,183,255,0.08)',
+    bg2: 'rgba(121,255,168,0.06)',
+    wall: 'rgba(214,226,255,0.30)',
+    wallCore: 'rgba(214,226,255,0.60)',
+    glowBlue: 'rgba(120,183,255,0.55)',
+    glowGreen: 'rgba(121,255,168,0.55)',
+    start: 'rgba(121,255,168,0.16)',
+    exit: 'rgba(255,214,110,0.16)',
+    exitCore: 'rgba(255,214,110,0.50)',
+    runnerCore: 'rgba(120,183,255,0.95)',
+    runnerGlow: 'rgba(120,183,255,0.55)',
+  };
+
   // background
   ctx.clearRect(0,0,size,size);
-  ctx.fillStyle = 'rgba(0,0,0,0.12)';
+  // base
+  ctx.fillStyle = C.bg0;
+  ctx.fillRect(0,0,size,size);
+
+  // soft radial blooms
+  const g1 = ctx.createRadialGradient(size*0.2,size*0.18, 10, size*0.2,size*0.18, size*0.75);
+  g1.addColorStop(0, C.bg1);
+  g1.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g1;
+  ctx.fillRect(0,0,size,size);
+
+  const g2 = ctx.createRadialGradient(size*0.85,size*0.12, 10, size*0.85,size*0.12, size*0.75);
+  g2.addColorStop(0, C.bg2);
+  g2.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g2;
+  ctx.fillRect(0,0,size,size);
+
+  // vignette
+  const vg = ctx.createRadialGradient(size*0.5,size*0.55, size*0.15, size*0.5,size*0.55, size*0.72);
+  vg.addColorStop(0, 'rgba(0,0,0,0)');
+  vg.addColorStop(1, 'rgba(0,0,0,0.50)');
+  ctx.fillStyle = vg;
   ctx.fillRect(0,0,size,size);
 
   // subtle grid
   ctx.save();
   ctx.translate(pad, pad);
-
-  // walls
-  ctx.strokeStyle = 'rgba(255,255,255,0.18)';
-  ctx.lineWidth = 2;
-
-  for(let y=0;y<maze.h;y++){
-    for(let x=0;x<maze.w;x++){
-      const v = maze.cells[y][x];
-      const x0 = x*cell;
-      const y0 = y*cell;
-      ctx.beginPath();
-      if(v & N){ ctx.moveTo(x0, y0); ctx.lineTo(x0+cell, y0); }
-      if(v & E){ ctx.moveTo(x0+cell, y0); ctx.lineTo(x0+cell, y0+cell); }
-      if(v & S){ ctx.moveTo(x0, y0+cell); ctx.lineTo(x0+cell, y0+cell); }
-      if(v & W){ ctx.moveTo(x0, y0); ctx.lineTo(x0, y0+cell); }
-      ctx.stroke();
-    }
+  ctx.strokeStyle = 'rgba(255,255,255,0.045)';
+  ctx.lineWidth = 1;
+  for(let i=0;i<=maze.w;i++){
+    const x = i*cell;
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x, maze.h*cell); ctx.stroke();
+  }
+  for(let i=0;i<=maze.h;i++){
+    const y = i*cell;
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(maze.w*cell, y); ctx.stroke();
   }
 
-  // start/exit markers
+  // neon walls (two-pass: glow + core)
+  const drawWalls = (stroke, lw, blur, shadowColor) => {
+    ctx.save();
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = lw;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.shadowBlur = blur;
+    ctx.shadowColor = shadowColor;
+
+    for(let y=0;y<maze.h;y++){
+      for(let x=0;x<maze.w;x++){
+        const v = maze.cells[y][x];
+        const x0 = x*cell;
+        const y0 = y*cell;
+        ctx.beginPath();
+        if(v & N){ ctx.moveTo(x0, y0); ctx.lineTo(x0+cell, y0); }
+        if(v & E){ ctx.moveTo(x0+cell, y0); ctx.lineTo(x0+cell, y0+cell); }
+        if(v & S){ ctx.moveTo(x0, y0+cell); ctx.lineTo(x0+cell, y0+cell); }
+        if(v & W){ ctx.moveTo(x0, y0); ctx.lineTo(x0, y0+cell); }
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  };
+
+  drawWalls(C.wall, 3, 14, C.glowBlue);
+  drawWalls(C.wallCore, 2, 0, 'rgba(0,0,0,0)');
+
+  // start/exit markers: soft neon tiles + corner glyph
   const start = opts.start;
   const exit = opts.exit;
+  const pulse = 0.55 + 0.45*Math.sin(now()/520);
 
-  // start
-  ctx.fillStyle = 'rgba(121,255,168,0.18)';
-  ctx.fillRect(start.x*cell+3, start.y*cell+3, cell-6, cell-6);
+  const tile = (x,y, fill, glow, core=null) => {
+    ctx.save();
+    const x0 = x*cell+3;
+    const y0 = y*cell+3;
+    const w = cell-6;
+    const h = cell-6;
 
-  // exit
-  ctx.fillStyle = 'rgba(255,214,110,0.18)';
-  ctx.fillRect(exit.x*cell+3, exit.y*cell+3, cell-6, cell-6);
+    ctx.shadowBlur = 18;
+    ctx.shadowColor = glow;
+    ctx.fillStyle = fill;
+    ctx.fillRect(x0,y0,w,h);
 
-  // runner dot
+    if(core){
+      ctx.shadowBlur = 26;
+      ctx.shadowColor = glow;
+      ctx.strokeStyle = core;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x0+2,y0+2,w-4,h-4);
+    }
+
+    ctx.restore();
+  };
+
+  tile(start.x, start.y, C.start, `rgba(121,255,168,${0.35*pulse})`, 'rgba(121,255,168,0.55)');
+  tile(exit.x, exit.y, C.exit, `rgba(255,214,110,${0.35*pulse})`, C.exitCore);
+
+  // runner dot: energy core + glow ring
   const r = opts.runner;
-  ctx.fillStyle = 'rgba(120,183,255,0.95)';
+  const cx = r.x*cell + cell/2;
+  const cy = r.y*cell + cell/2;
+
+  ctx.save();
+  ctx.shadowBlur = 18;
+  ctx.shadowColor = C.runnerGlow;
+  // outer glow ring
+  ctx.strokeStyle = `rgba(120,183,255,${0.55*pulse})`;
+  ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.arc(r.x*cell + cell/2, r.y*cell + cell/2, Math.max(4, cell*0.22), 0, Math.PI*2);
+  ctx.arc(cx, cy, Math.max(9, cell*0.34), 0, Math.PI*2);
+  ctx.stroke();
+
+  // core gradient
+  const rg = ctx.createRadialGradient(cx-2, cy-2, 2, cx, cy, Math.max(10, cell*0.28));
+  rg.addColorStop(0, 'rgba(255,255,255,0.95)');
+  rg.addColorStop(0.25, 'rgba(150,220,255,0.95)');
+  rg.addColorStop(1, C.runnerCore);
+  ctx.fillStyle = rg;
+  ctx.beginPath();
+  ctx.arc(cx, cy, Math.max(5, cell*0.22), 0, Math.PI*2);
   ctx.fill();
+  ctx.restore();
 
   ctx.restore();
 
   // overlay label
   if(opts.overlayText){
-    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    ctx.fillStyle = 'rgba(0,0,0,0.38)';
     ctx.fillRect(0,0,size,32);
-    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.fillStyle = 'rgba(234,240,255,0.88)';
     ctx.font = '12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace';
     ctx.fillText(opts.overlayText, 12, 20);
   }
@@ -357,7 +453,19 @@ function drawMaze(ctx, maze, opts){
 function drawRunnerView(ctx){
   const size = ctx.canvas.width;
   ctx.clearRect(0,0,size,size);
-  ctx.fillStyle = 'rgba(0,0,0,0.18)';
+
+  // runner view background: subtle neon fog (keeps walls hidden)
+  ctx.fillStyle = '#070A12';
+  ctx.fillRect(0,0,size,size);
+  const g1 = ctx.createRadialGradient(size*0.2,size*0.18, 10, size*0.2,size*0.18, size*0.75);
+  g1.addColorStop(0, 'rgba(120,183,255,0.08)');
+  g1.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g1;
+  ctx.fillRect(0,0,size,size);
+  const g2 = ctx.createRadialGradient(size*0.88,size*0.14, 10, size*0.88,size*0.14, size*0.75);
+  g2.addColorStop(0, 'rgba(121,255,168,0.06)');
+  g2.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g2;
   ctx.fillRect(0,0,size,size);
 
   const pad = 18;
