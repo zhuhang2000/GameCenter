@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Echo Maze | 回声迷宫 (Prototype)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">EM</div>
+      <div>
+        <div class="title">回声迷宫 <span class="muted">Echo Maze</span></div>
+        <div class="subtitle">合作解谜原型：延迟/碎片化沟通 + 隐形迷宫</div>
+      </div>
+    </div>
+    <div class="controls">
+      <button id="btnNew">新迷宫</button>
+      <button id="btnReset" class="secondary">重置</button>
+      <label class="toggle">
+        <input id="chkAssist" type="checkbox" />
+        <span>调试：给探路者显示迷宫</span>
+      </label>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="panel" id="panelRunner">
+      <div class="panelHeader">
+        <h2>探路者视角</h2>
+        <div class="badge" id="runnerStatus">READY</div>
+      </div>
+
+      <div class="hud">
+        <div class="hudItem"><div class="k">步数</div><div class="v" id="steps">0</div></div>
+        <div class="hudItem"><div class="k">剩余</div><div class="v" id="stepsLeft">60</div></div>
+        <div class="hudItem"><div class="k">接收冷却</div><div class="v" id="rxCooldown">0.0s</div></div>
+        <div class="hudItem"><div class="k">眩晕</div><div class="v" id="stun">0.0s</div></div>
+      </div>
+
+      <div class="canvasWrap">
+        <canvas id="runnerCanvas" width="420" height="420"></canvas>
+        <div class="hint">移动：WASD / 方向键（仅探路者可操作）</div>
+      </div>
+
+      <div class="inbox">
+        <div class="inboxHeader">
+          <div>
+            <div class="inboxTitle">回声接收（延迟 3s / 最多 5 字符）</div>
+            <div class="muted small">移动后 2s 内无法接收；撞墙眩晕 5s</div>
+          </div>
+          <button id="btnClearInbox" class="secondary">清空</button>
+        </div>
+        <div id="runnerInbox" class="log"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="panelEcho">
+      <div class="panelHeader">
+        <h2>回声师视角</h2>
+        <div class="badge neutral" id="echoStatus">GUIDE</div>
+      </div>
+
+      <div class="canvasWrap">
+        <canvas id="echoCanvas" width="420" height="420"></canvas>
+        <div class="hint">回声师能看到迷宫；探路者看不到</div>
+      </div>
+
+      <div class="compose">
+        <div class="row">
+          <input id="echoInput" type="text" maxlength="5" placeholder="输入指令(<=5字)：上/下/左/右，或N3..." />
+          <button id="btnSend">发送回声</button>
+        </div>
+
+        <div class="keypad">
+          <div class="muted small">数字方向键输入（类九宫格）：8上 2下 4左 6右，5=停</div>
+          <div class="pad">
+            <button class="padBtn" data-k="7" title="7">7</button>
+            <button class="padBtn" data-k="8" title="8(上)">8</button>
+            <button class="padBtn" data-k="9" title="9">9</button>
+            <button class="padBtn" data-k="4" title="4(左)">4</button>
+            <button class="padBtn" data-k="5" title="5(停)">5</button>
+            <button class="padBtn" data-k="6" title="6(右)">6</button>
+            <button class="padBtn" data-k="1" title="1">1</button>
+            <button class="padBtn" data-k="2" title="2(下)">2</button>
+            <button class="padBtn" data-k="3" title="3">3</button>
+          </div>
+        </div>
+
+        <div class="muted small">发送后将在 3 秒后到达探路者收件箱（若对方当时可接收）。</div>
+      </div>
+
+      <div class="outbox">
+        <div class="inboxHeader">
+          <div>
+            <div class="inboxTitle">回声队列</div>
+            <div class="muted small">展示延迟计时与投递结果</div>
+          </div>
+          <button id="btnClearOutbox" class="secondary">清空</button>
+        </div>
+        <div id="echoOutbox" class="log"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="muted">胜利条件：60 步内到达出口。原型仅做“玩法验证”。</div>
+  </footer>
+
+  <script src="game.js"></script>
+</body>
+</html>
