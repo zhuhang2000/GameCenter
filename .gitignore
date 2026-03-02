@@ -1,3 +1,4 @@
 .openclaw
 daily-game-ideas\
+*.md
 !AGENTS.md

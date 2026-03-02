@@ -1,775 +1,942 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎮 Discord Games 工作室 - 项目结构</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg-deep: #0a0a1a;
-    --bg-card: #12122a;
-    --bg-card-hover: #1a1a3a;
-    --border-glow: rgba(0, 212, 255, 0.15);
-    --cyan: #00d4ff;
-    --cyan-dim: rgba(0, 212, 255, 0.3);
-    --green: #00ff88;
-    --green-dim: rgba(0, 255, 136, 0.2);
-    --purple: #b388ff;
-    --purple-dim: rgba(179, 136, 255, 0.2);
-    --orange: #ff9f43;
-    --orange-dim: rgba(255, 159, 67, 0.2);
-    --pink: #ff6b9d;
-    --pink-dim: rgba(255, 107, 157, 0.2);
-    --yellow: #ffd93d;
-    --yellow-dim: rgba(255, 217, 61, 0.2);
-    --text: #e2e8f0;
-    --text-dim: #7a8ba6;
-    --text-label: #94a3b8;
-    --radius: 16px;
-    --radius-sm: 10px;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Claw Games 工作室 - 项目结构</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0a0a1a;
+            --bg-card: #12122a;
+            --bg-card-hover: #1a1a3a;
+            --border-glow: rgba(0, 212, 255, 0.15);
+            --cyan: #00d4ff;
+            --cyan-dim: rgba(0, 212, 255, 0.3);
+            --green: #00ff88;
+            --green-dim: rgba(0, 255, 136, 0.2);
+            --purple: #b388ff;
+            --purple-dim: rgba(179, 136, 255, 0.2);
+            --orange: #ff9f43;
+            --orange-dim: rgba(255, 159, 67, 0.2);
+            --pink: #ff6b9d;
+            --pink-dim: rgba(255, 107, 157, 0.2);
+            --yellow: #ffd93d;
+            --yellow-dim: rgba(255, 217, 61, 0.2);
+            --text: #e2e8f0;
+            --text-dim: #7a8ba6;
+            --text-label: #94a3b8;
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  body {
-    background: var(--bg-deep);
-    color: var(--text);
-    font-family: 'Noto Sans SC', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+        body {
+            background: var(--bg-deep);
+            color: var(--text);
+            font-family: 'Noto Sans SC', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-  /* ── ambient background ── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 600px 400px at 15% 20%, rgba(0,212,255,.06) 0%, transparent 70%),
-      radial-gradient(ellipse 500px 500px at 85% 75%, rgba(179,136,255,.05) 0%, transparent 70%),
-      radial-gradient(ellipse 400px 300px at 50% 50%, rgba(0,255,136,.03) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
+        /* ── ambient background ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 600px 400px at 15% 20%, rgba(0, 212, 255, .06) 0%, transparent 70%),
+                radial-gradient(ellipse 500px 500px at 85% 75%, rgba(179, 136, 255, .05) 0%, transparent 70%),
+                radial-gradient(ellipse 400px 300px at 50% 50%, rgba(0, 255, 136, .03) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
 
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 24px 80px;
-    position: relative;
-    z-index: 1;
-  }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+            position: relative;
+            z-index: 1;
+        }
 
-  /* ── header ── */
-  .header {
-    text-align: center;
-    margin-bottom: 56px;
-    animation: fadeInDown .8s ease;
-  }
+        /* ── header ── */
+        .header {
+            text-align: center;
+            margin-bottom: 56px;
+            animation: fadeInDown .8s ease;
+        }
 
-  .header h1 {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 2.4rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--cyan), var(--purple), var(--pink));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: -1px;
-    margin-bottom: 12px;
-  }
+        .header h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--cyan), var(--purple), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
 
-  .header .subtitle {
-    font-size: .95rem;
-    color: var(--text-dim);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
+        .header .subtitle {
+            font-size: .95rem;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
 
-  .header .divider {
-    width: 120px;
-    height: 2px;
-    margin: 20px auto 0;
-    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-    border-radius: 2px;
-  }
+        .header .divider {
+            width: 120px;
+            height: 2px;
+            margin: 20px auto 0;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            border-radius: 2px;
+        }
 
-  /* ── agent flow ── */
-  .agent-flow {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 48px;
-    flex-wrap: wrap;
-    animation: fadeInUp .8s ease .2s both;
-  }
+        /* ── agent flow ── */
+        .agent-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+            animation: fadeInUp .8s ease .2s both;
+        }
 
-  .agent-chip {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    border-radius: 100px;
-    font-size: .85rem;
-    font-weight: 600;
-    border: 1.5px solid;
-    backdrop-filter: blur(8px);
-    transition: all .3s ease;
-    cursor: default;
-  }
+        .agent-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-size: .85rem;
+            font-weight: 600;
+            border: 1.5px solid;
+            backdrop-filter: blur(8px);
+            transition: all .3s ease;
+            cursor: default;
+        }
 
-  .agent-chip:hover { transform: translateY(-2px); }
+        .agent-chip:hover {
+            transform: translateY(-2px);
+        }
 
-  .agent-chip.brainstorm {
-    background: var(--orange-dim);
-    border-color: rgba(255,159,67,.35);
-    color: var(--orange);
-  }
-  .agent-chip.coding {
-    background: var(--green-dim);
-    border-color: rgba(0,255,136,.35);
-    color: var(--green);
-  }
-  .agent-chip.desktop {
-    background: var(--purple-dim);
-    border-color: rgba(179,136,255,.35);
-    color: var(--purple);
-  }
-  .agent-chip.orchestrator {
-    background: var(--cyan-dim);
-    border-color: rgba(0,212,255,.35);
-    color: var(--cyan);
-  }
+        .agent-chip.brainstorm {
+            background: var(--orange-dim);
+            border-color: rgba(255, 159, 67, .35);
+            color: var(--orange);
+        }
 
-  .flow-arrow {
-    color: var(--text-dim);
-    font-size: 1.2rem;
-    opacity: .5;
-  }
+        .agent-chip.coding {
+            background: var(--green-dim);
+            border-color: rgba(0, 255, 136, .35);
+            color: var(--green);
+        }
 
-  /* ── card grid ── */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 24px;
-  }
+        .agent-chip.desktop {
+            background: var(--purple-dim);
+            border-color: rgba(179, 136, 255, .35);
+            color: var(--purple);
+        }
 
-  .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-glow);
-    border-radius: var(--radius);
-    padding: 28px;
-    position: relative;
-    overflow: hidden;
-    transition: all .4s cubic-bezier(.25,.8,.25,1);
-    animation: fadeInUp .6s ease both;
-  }
+        .agent-chip.orchestrator {
+            background: var(--cyan-dim);
+            border-color: rgba(0, 212, 255, .35);
+            color: var(--cyan);
+        }
 
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    border-radius: var(--radius) var(--radius) 0 0;
-    opacity: 0;
-    transition: opacity .4s ease;
-  }
+        .flow-arrow {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            opacity: .5;
+        }
 
-  .card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(0,212,255,.3);
-    box-shadow: 0 12px 40px rgba(0,0,0,.4), 0 0 30px rgba(0,212,255,.06);
-  }
+        /* ── card grid ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+        }
 
-  .card:hover::before { opacity: 1; }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius);
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+            transition: all .4s cubic-bezier(.25, .8, .25, 1);
+            animation: fadeInUp .6s ease both;
+        }
 
-  .card:nth-child(1) { animation-delay: .1s; }
-  .card:nth-child(2) { animation-delay: .2s; }
-  .card:nth-child(3) { animation-delay: .3s; }
-  .card:nth-child(4) { animation-delay: .4s; }
-  .card:nth-child(5) { animation-delay: .5s; }
-  .card:nth-child(6) { animation-delay: .6s; }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: var(--radius) var(--radius) 0 0;
+            opacity: 0;
+            transition: opacity .4s ease;
+        }
 
-  .card.cyan::before    { background: linear-gradient(90deg, var(--cyan), transparent); }
-  .card.green::before   { background: linear-gradient(90deg, var(--green), transparent); }
-  .card.purple::before  { background: linear-gradient(90deg, var(--purple), transparent); }
-  .card.orange::before  { background: linear-gradient(90deg, var(--orange), transparent); }
-  .card.pink::before    { background: linear-gradient(90deg, var(--pink), transparent); }
-  .card.yellow::before  { background: linear-gradient(90deg, var(--yellow), transparent); }
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 212, 255, .3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, .4), 0 0 30px rgba(0, 212, 255, .06);
+        }
 
-  .card-icon {
-    font-size: 2rem;
-    margin-bottom: 14px;
-    display: inline-block;
-    filter: drop-shadow(0 0 8px rgba(0,212,255,.25));
-  }
+        .card:hover::before {
+            opacity: 1;
+        }
 
-  .card-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1.05rem;
-    font-weight: 700;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+        .card:nth-child(1) {
+            animation-delay: .1s;
+        }
 
-  .card-desc {
-    font-size: .82rem;
-    color: var(--text-dim);
-    margin-bottom: 18px;
-    line-height: 1.5;
-  }
+        .card:nth-child(2) {
+            animation-delay: .2s;
+        }
 
-  /* tag */
-  .tag {
-    display: inline-block;
-    font-size: .7rem;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 100px;
-    letter-spacing: .5px;
-    margin-bottom: 14px;
-  }
+        .card:nth-child(3) {
+            animation-delay: .3s;
+        }
 
-  .tag.core     { background: var(--cyan-dim);   color: var(--cyan); }
-  .tag.creative { background: var(--orange-dim); color: var(--orange); }
-  .tag.system   { background: var(--purple-dim); color: var(--purple); }
-  .tag.data     { background: var(--green-dim);  color: var(--green); }
-  .tag.media    { background: var(--pink-dim);   color: var(--pink); }
-  .tag.config   { background: var(--yellow-dim); color: var(--yellow); }
+        .card:nth-child(4) {
+            animation-delay: .4s;
+        }
 
-  /* file tree inside card */
-  .tree {
-    list-style: none;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: .78rem;
-    line-height: 1.9;
-  }
+        .card:nth-child(5) {
+            animation-delay: .5s;
+        }
 
-  .tree li {
-    position: relative;
-    padding-left: 22px;
-    color: var(--text-label);
-  }
+        .card:nth-child(6) {
+            animation-delay: .6s;
+        }
 
-  .tree li::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 50%;
-    width: 14px;
-    border-left: 1.5px solid rgba(255,255,255,.08);
-    border-bottom: 1.5px solid rgba(255,255,255,.08);
-    border-radius: 0 0 0 4px;
-  }
+        .card.cyan::before {
+            background: linear-gradient(90deg, var(--cyan), transparent);
+        }
 
-  .tree li:last-child::after {
-    content: '';
-    position: absolute;
-    left: 0; top: 50%; bottom: 0;
-    width: 1px;
-    background: var(--bg-card);
-  }
+        .card.green::before {
+            background: linear-gradient(90deg, var(--green), transparent);
+        }
 
-  .tree .icon { margin-right: 6px; font-style: normal; }
+        .card.purple::before {
+            background: linear-gradient(90deg, var(--purple), transparent);
+        }
 
-  .tree .folder { color: var(--cyan); font-weight: 600; }
-  .tree .file   { color: var(--text-dim); }
-  .tree .file-hl { color: var(--green); }
-  .tree .file-cfg { color: var(--purple); }
+        .card.orange::before {
+            background: linear-gradient(90deg, var(--orange), transparent);
+        }
 
-  .tree .badge {
-    font-size: .65rem;
-    padding: 1px 6px;
-    border-radius: 4px;
-    margin-left: 6px;
-    vertical-align: middle;
-  }
+        .card.pink::before {
+            background: linear-gradient(90deg, var(--pink), transparent);
+        }
 
-  .tree .badge-done {
-    background: var(--green-dim);
-    color: var(--green);
-  }
-  .tree .badge-wip {
-    background: var(--orange-dim);
-    color: var(--orange);
-  }
+        .card.yellow::before {
+            background: linear-gradient(90deg, var(--yellow), transparent);
+        }
 
-  /* ── config files section ── */
-  .config-section {
-    margin-top: 40px;
-    animation: fadeInUp .6s ease .7s both;
-  }
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 14px;
+            display: inline-block;
+            filter: drop-shadow(0 0 8px rgba(0, 212, 255, .25));
+        }
 
-  .config-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-dim);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+        .card-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-  .config-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, rgba(255,255,255,.08), transparent);
-  }
+        .card-desc {
+            font-size: .82rem;
+            color: var(--text-dim);
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
 
-  .config-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 12px;
-  }
+        /* tag */
+        .tag {
+            display: inline-block;
+            font-size: .7rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 100px;
+            letter-spacing: .5px;
+            margin-bottom: 14px;
+        }
 
-  .config-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-glow);
-    border-radius: var(--radius-sm);
-    font-size: .82rem;
-    transition: all .3s ease;
-    cursor: default;
-  }
+        .tag.core {
+            background: var(--cyan-dim);
+            color: var(--cyan);
+        }
 
-  .config-item:hover {
-    border-color: rgba(179,136,255,.3);
-    transform: translateX(4px);
-    background: var(--bg-card-hover);
-  }
+        .tag.creative {
+            background: var(--orange-dim);
+            color: var(--orange);
+        }
 
-  .config-item .cfg-icon {
-    font-size: 1.2rem;
-    flex-shrink: 0;
-  }
+        .tag.system {
+            background: var(--purple-dim);
+            color: var(--purple);
+        }
 
-  .config-item .cfg-name {
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 600;
-    color: var(--purple);
-    font-size: .8rem;
-  }
+        .tag.data {
+            background: var(--green-dim);
+            color: var(--green);
+        }
 
-  .config-item .cfg-desc {
-    font-size: .72rem;
-    color: var(--text-dim);
-    margin-top: 2px;
-  }
+        .tag.media {
+            background: var(--pink-dim);
+            color: var(--pink);
+        }
 
-  /* ── footer stats ── */
-  .stats {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    margin-top: 56px;
-    flex-wrap: wrap;
-    animation: fadeInUp .6s ease .9s both;
-  }
+        .tag.config {
+            background: var(--yellow-dim);
+            color: var(--yellow);
+        }
 
-  .stat {
-    text-align: center;
-  }
+        /* file tree inside card */
+        .tree {
+            list-style: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .78rem;
+            line-height: 1.9;
+        }
 
-  .stat-value {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 2rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--cyan), var(--green));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+        .tree li {
+            position: relative;
+            padding-left: 22px;
+            color: var(--text-label);
+        }
 
-  .stat-label {
-    font-size: .75rem;
-    color: var(--text-dim);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-top: 4px;
-  }
+        .tree li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 50%;
+            width: 14px;
+            border-left: 1.5px solid rgba(255, 255, 255, .08);
+            border-bottom: 1.5px solid rgba(255, 255, 255, .08);
+            border-radius: 0 0 0 4px;
+        }
 
-  /* ── floating particles ── */
-  .particles {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-  }
+        .tree li:last-child::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            bottom: 0;
+            width: 1px;
+            background: var(--bg-card);
+        }
 
-  .particle {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    border-radius: 50%;
-    opacity: 0;
-    animation: float linear infinite;
-  }
+        .tree .icon {
+            margin-right: 6px;
+            font-style: normal;
+        }
 
-  @keyframes float {
-    0%   { opacity: 0; transform: translateY(100vh) scale(0); }
-    10%  { opacity: 1; }
-    90%  { opacity: 1; }
-    100% { opacity: 0; transform: translateY(-20vh) scale(1); }
-  }
+        .tree .folder {
+            color: var(--cyan);
+            font-weight: 600;
+        }
 
-  @keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-30px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+        .tree .file {
+            color: var(--text-dim);
+        }
 
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+        .tree .file-hl {
+            color: var(--green);
+        }
 
-  /* ── workflow ribbon ── */
-  .workflow {
-    margin-top: 48px;
-    padding: 32px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-glow);
-    border-radius: var(--radius);
-    animation: fadeInUp .6s ease .8s both;
-  }
+        .tree .file-cfg {
+            color: var(--purple);
+        }
 
-  .workflow h3 {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1rem;
-    margin-bottom: 24px;
-    color: var(--text);
-  }
+        .tree .badge {
+            font-size: .65rem;
+            padding: 1px 6px;
+            border-radius: 4px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
 
-  .flow-steps {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+        .tree .badge-done {
+            background: var(--green-dim);
+            color: var(--green);
+        }
 
-  .flow-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    min-width: 110px;
-    padding: 16px 12px;
-    transition: transform .3s ease;
-  }
+        .tree .badge-wip {
+            background: var(--orange-dim);
+            color: var(--orange);
+        }
 
-  .flow-step:hover { transform: scale(1.08); }
+        /* ── config files section ── */
+        .config-section {
+            margin-top: 40px;
+            animation: fadeInUp .6s ease .7s both;
+        }
 
-  .flow-step .step-num {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 700;
-    font-size: .85rem;
-  }
+        .config-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-  .flow-step:nth-child(1) .step-num { background: var(--orange-dim); color: var(--orange); border: 1.5px solid rgba(255,159,67,.4); }
-  .flow-step:nth-child(3) .step-num { background: var(--cyan-dim); color: var(--cyan); border: 1.5px solid rgba(0,212,255,.4); }
-  .flow-step:nth-child(5) .step-num { background: var(--green-dim); color: var(--green); border: 1.5px solid rgba(0,255,136,.4); }
-  .flow-step:nth-child(7) .step-num { background: var(--purple-dim); color: var(--purple); border: 1.5px solid rgba(179,136,255,.4); }
-  .flow-step:nth-child(9) .step-num { background: var(--pink-dim); color: var(--pink); border: 1.5px solid rgba(255,107,157,.4); }
+        .config-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, .08), transparent);
+        }
 
-  .flow-step .step-label {
-    font-size: .75rem;
-    color: var(--text-dim);
-    text-align: center;
-    line-height: 1.4;
-  }
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+        }
 
-  .flow-step .step-agent {
-    font-size: .65rem;
-    font-weight: 600;
-    letter-spacing: .5px;
-  }
+        .config-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-sm);
+            font-size: .82rem;
+            transition: all .3s ease;
+            cursor: default;
+        }
 
-  .flow-connector {
-    width: 32px;
-    height: 2px;
-    background: linear-gradient(90deg, rgba(255,255,255,.1), rgba(255,255,255,.04));
-    flex-shrink: 0;
-    position: relative;
-  }
+        .config-item:hover {
+            border-color: rgba(179, 136, 255, .3);
+            transform: translateX(4px);
+            background: var(--bg-card-hover);
+        }
 
-  .flow-connector::after {
-    content: '›';
-    position: absolute;
-    right: -4px;
-    top: -9px;
-    color: var(--text-dim);
-    font-size: .9rem;
-    opacity: .4;
-  }
+        .config-item .cfg-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
 
-  /* ── responsive ── */
-  @media (max-width: 768px) {
-    .header h1 { font-size: 1.6rem; }
-    .grid { grid-template-columns: 1fr; }
-    .config-grid { grid-template-columns: 1fr; }
-    .agent-flow { gap: 8px; }
-    .flow-connector { width: 16px; }
-  }
-</style>
+        .config-item .cfg-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--purple);
+            font-size: .8rem;
+        }
+
+        .config-item .cfg-desc {
+            font-size: .72rem;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        /* ── footer stats ── */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 56px;
+            flex-wrap: wrap;
+            animation: fadeInUp .6s ease .9s both;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: .75rem;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        /* ── floating particles ── */
+        .particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            opacity: 0;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0);
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-20vh) scale(1);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── workflow ribbon ── */
+        .workflow {
+            margin-top: 48px;
+            padding: 32px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius);
+            animation: fadeInUp .6s ease .8s both;
+        }
+
+        .workflow h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            margin-bottom: 24px;
+            color: var(--text);
+        }
+
+        .flow-steps {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-width: 110px;
+            padding: 16px 12px;
+            transition: transform .3s ease;
+        }
+
+        .flow-step:hover {
+            transform: scale(1.08);
+        }
+
+        .flow-step .step-num {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: .85rem;
+        }
+
+        .flow-step:nth-child(1) .step-num {
+            background: var(--orange-dim);
+            color: var(--orange);
+            border: 1.5px solid rgba(255, 159, 67, .4);
+        }
+
+        .flow-step:nth-child(3) .step-num {
+            background: var(--cyan-dim);
+            color: var(--cyan);
+            border: 1.5px solid rgba(0, 212, 255, .4);
+        }
+
+        .flow-step:nth-child(5) .step-num {
+            background: var(--green-dim);
+            color: var(--green);
+            border: 1.5px solid rgba(0, 255, 136, .4);
+        }
+
+        .flow-step:nth-child(7) .step-num {
+            background: var(--purple-dim);
+            color: var(--purple);
+            border: 1.5px solid rgba(179, 136, 255, .4);
+        }
+
+        .flow-step:nth-child(9) .step-num {
+            background: var(--pink-dim);
+            color: var(--pink);
+            border: 1.5px solid rgba(255, 107, 157, .4);
+        }
+
+        .flow-step .step-label {
+            font-size: .75rem;
+            color: var(--text-dim);
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .flow-step .step-agent {
+            font-size: .65rem;
+            font-weight: 600;
+            letter-spacing: .5px;
+        }
+
+        .flow-connector {
+            width: 32px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .04));
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .flow-connector::after {
+            content: '›';
+            position: absolute;
+            right: -4px;
+            top: -9px;
+            color: var(--text-dim);
+            font-size: .9rem;
+            opacity: .4;
+        }
+
+        /* ── responsive ── */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.6rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .config-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .agent-flow {
+                gap: 8px;
+            }
+
+            .flow-connector {
+                width: 16px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<!-- ambient particles -->
-<div class="particles" id="particles"></div>
+    <!-- ambient particles -->
+    <div class="particles" id="particles"></div>
 
-<div class="container">
+    <div class="container">
 
-  <!-- Header -->
-  <header class="header">
-    <h1>🎮 Discord Games 工作室</h1>
-    <div class="subtitle">项目结构 &amp; 功能架构</div>
-    <div class="divider"></div>
-  </header>
+        <!-- Header -->
+        <header class="header">
+            <h1>🎮 Claw Games 工作室</h1>
+            <div class="subtitle">项目结构 &amp; 功能架构</div>
+            <div class="divider"></div>
+        </header>
 
-  <!-- Agent Role Flow -->
-  <div class="agent-flow">
-    <div class="agent-chip orchestrator">🧭 Orchestrator<span style="opacity:.5;margin-left:4px">调度中心</span></div>
-    <span class="flow-arrow">→</span>
-    <div class="agent-chip brainstorm">💡 Brainstorming<span style="opacity:.5;margin-left:4px">灵感获取</span></div>
-    <span class="flow-arrow">→</span>
-    <div class="agent-chip coding">⚡ Coding Agent<span style="opacity:.5;margin-left:4px">代码编写</span></div>
-    <span class="flow-arrow">→</span>
-    <div class="agent-chip desktop">🖥️ Desktop Control<span style="opacity:.5;margin-left:4px">截图验证</span></div>
-  </div>
-
-  <!-- Main folder cards -->
-  <div class="grid">
-
-    <!-- auto-coding -->
-    <div class="card cyan">
-      <div class="card-icon">🏗️</div>
-      <span class="tag core">核心开发区</span>
-      <div class="card-title">auto-coding/</div>
-      <div class="card-desc">所有游戏项目的代码、计划文档存放地。由 coding-agent 驱动编写。</div>
-      <ul class="tree">
-        <li><i class="icon">📁</i><span class="folder">plan/</span> — 计划文档</li>
-        <li>&emsp;<i class="icon">📄</i><span class="file">snake-game-enhancements.md</span> <span class="badge badge-wip">进行中</span></li>
-        <li><i class="icon">📁</i><span class="folder">snake-game/</span> — 贪吃蛇游戏</li>
-        <li>&emsp;<i class="icon">🌐</i><span class="file-hl">index.html</span></li>
-        <li>&emsp;<i class="icon">⚙️</i><span class="file-hl">game.js</span> <span class="badge badge-done">✓ 完成</span></li>
-        <li>&emsp;<i class="icon">🎨</i><span class="file-hl">style.css</span></li>
-        <li>&emsp;<i class="icon">📖</i><span class="file">README.md</span></li>
-      </ul>
-    </div>
-
-    <!-- creative-games -->
-    <div class="card orange">
-      <div class="card-icon">✨</div>
-      <span class="tag creative">创意仓库</span>
-      <div class="card-title">creative-games/</div>
-      <div class="card-desc">每日由 brainstorming 生成的创意游戏概念。通过 Cron 定时任务每天 14:00 自动发布到 Discord。</div>
-      <ul class="tree">
-        <li><i class="icon">🎯</i><span class="file-hl">game-idea-2026-03-02.md</span></li>
-        <li><i class="icon">🕰️</i><span class="file">2026-03-02-clockwork-alibi.md</span></li>
-        <li><i class="icon">🌀</i><span class="file">2026-03-02-echo-maze.md</span></li>
-        <li><i class="icon">🍽️</i><span class="file">2026-03-02-paradox-diner.md</span></li>
-        <li><i class="icon">💰</i><span class="file">2026-03-02-silent-auction-heist.md</span></li>
-      </ul>
-    </div>
-
-    <!-- daily-game-ideas -->
-    <div class="card yellow">
-      <div class="card-icon">⏰</div>
-      <span class="tag config">定时任务</span>
-      <div class="card-title">daily-game-ideas/</div>
-      <div class="card-desc">Cron 定时任务的提示词配置。驱动每日创意游戏的自动生成与 Discord 发布流程。</div>
-      <ul class="tree">
-        <li><i class="icon">📋</i><span class="file-cfg">cron-prompt-daily-creative-game.txt</span></li>
-      </ul>
-    </div>
-
-    <!-- memory -->
-    <div class="card green">
-      <div class="card-icon">🧠</div>
-      <span class="tag data">工作记忆</span>
-      <div class="card-title">memory/</div>
-      <div class="card-desc">Agent 的持久化记忆。包含会话总结、工作流文档，确保跨会话的上下文连续性。</div>
-      <ul class="tree">
-        <li><i class="icon">📅</i><span class="file-hl">2026-03-01-session.md</span> — 会话总结</li>
-        <li><i class="icon">🔧</i><span class="file-hl">browser-automation-workflow.md</span> — 自动化指南</li>
-      </ul>
-    </div>
-
-    <!-- screenshot -->
-    <div class="card pink">
-      <div class="card-icon">📸</div>
-      <span class="tag media">截图存档</span>
-      <div class="card-title">screenshot/</div>
-      <div class="card-desc">由 desktop-control 截取的游戏运行截图。用于验证效果和向用户展示成果。</div>
-      <ul class="tree">
-        <li><i class="icon">🖼️</i><span class="file">snake-game-screenshot.png</span></li>
-        <li><i class="icon">🖼️</i><span class="file">snake-game-phase2.png</span></li>
-        <li><i class="icon">🖼️</i><span class="file">snake-game-phase2-gameplay.png</span></li>
-      </ul>
-    </div>
-
-    <!-- .openclaw -->
-    <div class="card purple">
-      <div class="card-icon">⚙️</div>
-      <span class="tag system">系统配置</span>
-      <div class="card-title">.openclaw/</div>
-      <div class="card-desc">OpenClaw 平台的系统配置目录。管理工作区状态和内部运行信息。</div>
-      <ul class="tree">
-        <li><i class="icon">📄</i><span class="file-cfg">workspace-state.json</span></li>
-      </ul>
-    </div>
-
-  </div>
-
-  <!-- Root config files -->
-  <div class="config-section">
-    <div class="config-title">📑 根目录配置文件</div>
-    <div class="config-grid">
-      <div class="config-item">
-        <span class="cfg-icon">🧭</span>
-        <div>
-          <div class="cfg-name">AGENTS.md</div>
-          <div class="cfg-desc">Agent 定位、工作流与调度规则</div>
+        <!-- Agent Role Flow -->
+        <div class="agent-flow">
+            <div class="agent-chip orchestrator">🧭 Orchestrator<span style="opacity:.5;margin-left:4px">调度中心</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="agent-chip brainstorm">💡 Brainstorming<span style="opacity:.5;margin-left:4px">灵感获取</span>
+            </div>
+            <span class="flow-arrow">→</span>
+            <div class="agent-chip coding">⚡ Coding Agent<span style="opacity:.5;margin-left:4px">代码编写</span></div>
+            <span class="flow-arrow">→</span>
+            <div class="agent-chip desktop">🖥️ Desktop Control<span style="opacity:.5;margin-left:4px">截图验证</span>
+            </div>
         </div>
-      </div>
-      <div class="config-item">
-        <span class="cfg-icon">👤</span>
-        <div>
-          <div class="cfg-name">IDENTITY.md</div>
-          <div class="cfg-desc">Agent 身份：名称、特征、风格</div>
-        </div>
-      </div>
-      <div class="config-item">
-        <span class="cfg-icon">💎</span>
-        <div>
-          <div class="cfg-name">SOUL.md</div>
-          <div class="cfg-desc">行为准则与核心价值观</div>
-        </div>
-      </div>
-      <div class="config-item">
-        <span class="cfg-icon">🔧</span>
-        <div>
-          <div class="cfg-name">TOOLS.md</div>
-          <div class="cfg-desc">本地工具与环境特定配置</div>
-        </div>
-      </div>
-      <div class="config-item">
-        <span class="cfg-icon">🙋</span>
-        <div>
-          <div class="cfg-name">USER.md</div>
-          <div class="cfg-desc">用户偏好与上下文档案</div>
-        </div>
-      </div>
-      <div class="config-item">
-        <span class="cfg-icon">🚀</span>
-        <div>
-          <div class="cfg-name">BOOTSTRAP.md</div>
-          <div class="cfg-desc">首次启动引导流程</div>
-        </div>
-      </div>
-      <div class="config-item">
-        <span class="cfg-icon">💓</span>
-        <div>
-          <div class="cfg-name">HEARTBEAT.md</div>
-          <div class="cfg-desc">心跳任务配置（已迁移至 Cron）</div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Workflow -->
-  <div class="workflow">
-    <h3>🔄 游戏开发工作流</h3>
-    <div class="flow-steps">
-      <div class="flow-step">
-        <div class="step-num">1</div>
-        <div class="step-label">灵感获取</div>
-        <div class="step-agent" style="color:var(--orange)">brainstorming</div>
-      </div>
-      <div class="flow-connector"></div>
-      <div class="flow-step">
-        <div class="step-num">2</div>
-        <div class="step-label">制定计划</div>
-        <div class="step-agent" style="color:var(--cyan)">plan/*.md</div>
-      </div>
-      <div class="flow-connector"></div>
-      <div class="flow-step">
-        <div class="step-num">3</div>
-        <div class="step-label">编码实现</div>
-        <div class="step-agent" style="color:var(--green)">coding-agent</div>
-      </div>
-      <div class="flow-connector"></div>
-      <div class="flow-step">
-        <div class="step-num">4</div>
-        <div class="step-label">截图验证</div>
-        <div class="step-agent" style="color:var(--purple)">desktop-control</div>
-      </div>
-      <div class="flow-connector"></div>
-      <div class="flow-step">
-        <div class="step-num">5</div>
-        <div class="step-label">展示成果</div>
-        <div class="step-agent" style="color:var(--pink)">screenshot/</div>
-      </div>
-    </div>
-  </div>
+        <!-- Main folder cards -->
+        <div class="grid">
 
-  <!-- Stats -->
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-value">7</div>
-      <div class="stat-label">子目录</div>
-    </div>
-    <div class="stat">
-      <div class="stat-value">7</div>
-      <div class="stat-label">配置文件</div>
-    </div>
-    <div class="stat">
-      <div class="stat-value">1</div>
-      <div class="stat-label">已完成游戏</div>
-    </div>
-    <div class="stat">
-      <div class="stat-value">5</div>
-      <div class="stat-label">创意概念</div>
-    </div>
-    <div class="stat">
-      <div class="stat-value">3</div>
-      <div class="stat-label">截图存档</div>
-    </div>
-  </div>
+            <!-- auto-coding -->
+            <div class="card cyan">
+                <div class="card-icon">🏗️</div>
+                <span class="tag core">核心开发区</span>
+                <div class="card-title">auto-coding/</div>
+                <div class="card-desc">所有游戏项目的代码、计划文档存放地。由 coding-agent 驱动编写。</div>
+                <ul class="tree">
+                    <li><i class="icon">📁</i><span class="folder">plan/</span> — 计划文档</li>
+                    <li>&emsp;<i class="icon">📄</i><span class="file">snake-game-enhancements.md</span> <span
+                            class="badge badge-wip">进行中</span></li>
+                    <li><i class="icon">📁</i><span class="folder">snake-game/</span> — 贪吃蛇游戏</li>
+                    <li>&emsp;<i class="icon">🌐</i><span class="file-hl">index.html</span></li>
+                    <li>&emsp;<i class="icon">⚙️</i><span class="file-hl">game.js</span> <span
+                            class="badge badge-done">✓ 完成</span></li>
+                    <li>&emsp;<i class="icon">🎨</i><span class="file-hl">style.css</span></li>
+                    <li>&emsp;<i class="icon">📖</i><span class="file">README.md</span></li>
+                </ul>
+            </div>
 
-</div>
+            <!-- creative-games -->
+            <div class="card orange">
+                <div class="card-icon">✨</div>
+                <span class="tag creative">创意仓库</span>
+                <div class="card-title">creative-games/</div>
+                <div class="card-desc">每日由 brainstorming 生成的创意游戏概念。通过 Cron 定时任务每天 14:00 自动发布到 Discord。</div>
+                <ul class="tree">
+                    <li><i class="icon">🎯</i><span class="file-hl">game-idea-2026-03-02.md</span></li>
+                    <li><i class="icon">🕰️</i><span class="file">2026-03-02-clockwork-alibi.md</span></li>
+                    <li><i class="icon">🌀</i><span class="file">2026-03-02-echo-maze.md</span></li>
+                    <li><i class="icon">🍽️</i><span class="file">2026-03-02-paradox-diner.md</span></li>
+                    <li><i class="icon">💰</i><span class="file">2026-03-02-silent-auction-heist.md</span></li>
+                </ul>
+            </div>
 
-<script>
-  // Generate floating particles
-  const container = document.getElementById('particles');
-  const colors = ['#00d4ff', '#00ff88', '#b388ff', '#ff9f43', '#ff6b9d'];
-  for (let i = 0; i < 30; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.left = Math.random() * 100 + '%';
-    p.style.background = colors[Math.floor(Math.random() * colors.length)];
-    p.style.animationDuration = (12 + Math.random() * 20) + 's';
-    p.style.animationDelay = Math.random() * 15 + 's';
-    p.style.width = (2 + Math.random() * 3) + 'px';
-    p.style.height = p.style.width;
-    container.appendChild(p);
-  }
-</script>
+            <!-- daily-game-ideas -->
+            <div class="card yellow">
+                <div class="card-icon">⏰</div>
+                <span class="tag config">定时任务</span>
+                <div class="card-title">daily-game-ideas/</div>
+                <div class="card-desc">Cron 定时任务的提示词配置。驱动每日创意游戏的自动生成与 Discord 发布流程。</div>
+                <ul class="tree">
+                    <li><i class="icon">📋</i><span class="file-cfg">cron-prompt-daily-creative-game.txt</span></li>
+                </ul>
+            </div>
+
+            <!-- memory -->
+            <div class="card green">
+                <div class="card-icon">🧠</div>
+                <span class="tag data">工作记忆</span>
+                <div class="card-title">memory/</div>
+                <div class="card-desc">Agent 的持久化记忆。包含会话总结、工作流文档，确保跨会话的上下文连续性。</div>
+                <ul class="tree">
+                    <li><i class="icon">📅</i><span class="file-hl">2026-03-01-session.md</span> — 会话总结</li>
+                    <li><i class="icon">🔧</i><span class="file-hl">browser-automation-workflow.md</span> — 自动化指南</li>
+                </ul>
+            </div>
+
+            <!-- screenshot -->
+            <div class="card pink">
+                <div class="card-icon">📸</div>
+                <span class="tag media">截图存档</span>
+                <div class="card-title">screenshot/</div>
+                <div class="card-desc">由 desktop-control 截取的游戏运行截图。用于验证效果和向用户展示成果。</div>
+                <ul class="tree">
+                    <li><i class="icon">🖼️</i><span class="file">snake-game-screenshot.png</span></li>
+                    <li><i class="icon">🖼️</i><span class="file">snake-game-phase2.png</span></li>
+                    <li><i class="icon">🖼️</i><span class="file">snake-game-phase2-gameplay.png</span></li>
+                </ul>
+            </div>
+
+            <!-- .openclaw -->
+            <div class="card purple">
+                <div class="card-icon">⚙️</div>
+                <span class="tag system">系统配置</span>
+                <div class="card-title">.openclaw/</div>
+                <div class="card-desc">OpenClaw 平台的系统配置目录。管理工作区状态和内部运行信息。</div>
+                <ul class="tree">
+                    <li><i class="icon">📄</i><span class="file-cfg">workspace-state.json</span></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Root config files -->
+        <div class="config-section">
+            <div class="config-title">📑 根目录配置文件</div>
+            <div class="config-grid">
+                <div class="config-item">
+                    <span class="cfg-icon">🧭</span>
+                    <div>
+                        <div class="cfg-name">AGENTS.md</div>
+                        <div class="cfg-desc">Agent 定位、工作流与调度规则</div>
+                    </div>
+                </div>
+                <div class="config-item">
+                    <span class="cfg-icon">👤</span>
+                    <div>
+                        <div class="cfg-name">IDENTITY.md</div>
+                        <div class="cfg-desc">Agent 身份：名称、特征、风格</div>
+                    </div>
+                </div>
+                <div class="config-item">
+                    <span class="cfg-icon">💎</span>
+                    <div>
+                        <div class="cfg-name">SOUL.md</div>
+                        <div class="cfg-desc">行为准则与核心价值观</div>
+                    </div>
+                </div>
+                <div class="config-item">
+                    <span class="cfg-icon">🔧</span>
+                    <div>
+                        <div class="cfg-name">TOOLS.md</div>
+                        <div class="cfg-desc">本地工具与环境特定配置</div>
+                    </div>
+                </div>
+                <div class="config-item">
+                    <span class="cfg-icon">🙋</span>
+                    <div>
+                        <div class="cfg-name">USER.md</div>
+                        <div class="cfg-desc">用户偏好与上下文档案</div>
+                    </div>
+                </div>
+                <div class="config-item">
+                    <span class="cfg-icon">🚀</span>
+                    <div>
+                        <div class="cfg-name">BOOTSTRAP.md</div>
+                        <div class="cfg-desc">首次启动引导流程</div>
+                    </div>
+                </div>
+                <div class="config-item">
+                    <span class="cfg-icon">💓</span>
+                    <div>
+                        <div class="cfg-name">HEARTBEAT.md</div>
+                        <div class="cfg-desc">心跳任务配置（已迁移至 Cron）</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workflow -->
+        <div class="workflow">
+            <h3>🔄 游戏开发工作流</h3>
+            <div class="flow-steps">
+                <div class="flow-step">
+                    <div class="step-num">1</div>
+                    <div class="step-label">灵感获取</div>
+                    <div class="step-agent" style="color:var(--orange)">brainstorming</div>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <div class="step-num">2</div>
+                    <div class="step-label">制定计划</div>
+                    <div class="step-agent" style="color:var(--cyan)">plan/*.md</div>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <div class="step-num">3</div>
+                    <div class="step-label">编码实现</div>
+                    <div class="step-agent" style="color:var(--green)">coding-agent</div>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <div class="step-num">4</div>
+                    <div class="step-label">截图验证</div>
+                    <div class="step-agent" style="color:var(--purple)">desktop-control</div>
+                </div>
+                <div class="flow-connector"></div>
+                <div class="flow-step">
+                    <div class="step-num">5</div>
+                    <div class="step-label">展示成果</div>
+                    <div class="step-agent" style="color:var(--pink)">screenshot/</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">7</div>
+                <div class="stat-label">子目录</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">7</div>
+                <div class="stat-label">配置文件</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">1</div>
+                <div class="stat-label">已完成游戏</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">5</div>
+                <div class="stat-label">创意概念</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">3</div>
+                <div class="stat-label">截图存档</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Generate floating particles
+        const container = document.getElementById('particles');
+        const colors = ['#00d4ff', '#00ff88', '#b388ff', '#ff9f43', '#ff6b9d'];
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+            p.style.animationDuration = (12 + Math.random() * 20) + 's';
+            p.style.animationDelay = Math.random() * 15 + 's';
+            p.style.width = (2 + Math.random() * 3) + 'px';
+            p.style.height = p.style.width;
+            container.appendChild(p);
+        }
+    </script>
 
 </body>
+
 </html>
