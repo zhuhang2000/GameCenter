@@ -175,21 +175,21 @@ function setRunnerBadge(text, kind){
 }
 
 function updateHUD(){
-  const r = state.runner;
-  ui.steps.textContent = String(r.steps);
-  ui.stepsLeft.textContent = String(Math.max(0, MAX_STEPS - r.steps));
+  const runner = state.runner;
+  ui.steps.textContent = String(runner.steps);
+  ui.stepsLeft.textContent = String(Math.max(0, MAX_STEPS - runner.steps));
 
   const t = now();
-  ui.rxCooldown.textContent = fmtS(Math.max(0, r.rxCooldownUntil - t));
-  ui.stun.textContent = fmtS(Math.max(0, r.stunnedUntil - t));
+  ui.rxCooldown.textContent = fmtS(Math.max(0, runner.rxCooldownUntil - t));
+  ui.stun.textContent = fmtS(Math.max(0, runner.stunnedUntil - t));
 
-  if(r.won){
+  if(runner.won){
     setRunnerBadge('WIN', '');
-  } else if(r.lost){
+  } else if(runner.lost){
     setRunnerBadge('LOSE', 'danger');
-  } else if(t < r.stunnedUntil){
+  } else if(t < runner.stunnedUntil){
     setRunnerBadge('STUNNED', 'danger');
-  } else if(t < r.rxCooldownUntil){
+  } else if(t < runner.rxCooldownUntil){
     setRunnerBadge('DEAF', 'warn');
   } else {
     setRunnerBadge('READY', 'neutral');
@@ -363,7 +363,7 @@ function drawRunnerView(ctx){
   const pad = 18;
   const cell = (size - pad*2)/GRID;
 
-  // Runner doesn't see maze: draw soft fog and only their position + exit hint ring (optional?)
+  // Runner doesn't see maze: draw soft fog and only their position
   ctx.save();
   ctx.translate(pad,pad);
 
@@ -394,27 +394,25 @@ function drawRunnerView(ctx){
     }
   }
 
-  // Start and exit are hidden for runner in real game; in prototype we show nothing.
-
   // runner dot
-  const r = state.runner;
+  const runner = state.runner;
   ctx.fillStyle = 'rgba(120,183,255,0.95)';
   ctx.beginPath();
-  ctx.arc(r.x*cell + cell/2, r.y*cell + cell/2, Math.max(4, cell*0.24), 0, Math.PI*2);
+  ctx.arc(runner.x*cell + cell/2, runner.y*cell + cell/2, Math.max(4, cell*0.24), 0, Math.PI*2);
   ctx.fill();
 
   // status ring
   const t = now();
-  if(t < r.stunnedUntil){
+  if(t < runner.stunnedUntil){
     ctx.strokeStyle = 'rgba(255,92,122,0.8)';
-  } else if(t < r.rxCooldownUntil){
+  } else if(t < runner.rxCooldownUntil){
     ctx.strokeStyle = 'rgba(255,214,110,0.8)';
   } else {
     ctx.strokeStyle = 'rgba(121,255,168,0.7)';
   }
   ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.arc(r.x*cell + cell/2, r.y*cell + cell/2, Math.max(8, cell*0.34), 0, Math.PI*2);
+  ctx.arc(runner.x*cell + cell/2, runner.y*cell + cell/2, Math.max(8, cell*0.34), 0, Math.PI*2);
   ctx.stroke();
 
   ctx.restore();
@@ -424,8 +422,7 @@ function drawRunnerView(ctx){
   ctx.fillRect(0,0,size,32);
   ctx.fillStyle = 'rgba(255,255,255,0.85)';
   ctx.font = '12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace';
-  const r = state.runner;
-  const txt = r.won ? '✅ 已到达出口！' : (r.lost ? '❌ 60步用尽' : '你看不到迷宫。依赖回声师的指令。');
+  const txt = runner.won ? '✅ 已到达出口！' : (runner.lost ? '❌ 60步用尽' : '你看不到迷宫。依赖回声师的指令。');
   ctx.fillText(state.debugAssist ? (txt + '  [DEBUG: 显示迷宫]') : txt, 12, 20);
 }
 
